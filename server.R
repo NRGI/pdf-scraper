@@ -86,6 +86,7 @@ shinyServer(function(input, output, session) {
         if("Payee Name" %in% names(temp)) {
           print("Stop point 3")
           gs_add_row(key, ws=2, input=temp)
+          showNotification("Succesfully added", duration=3, type="message")
           print("Stop point 4")
         }
         
@@ -94,6 +95,7 @@ shinyServer(function(input, output, session) {
           # masterTable$masterProject <- unique(rbind(final, temp, fill=TRUE))
           print("Stop point 3.pro")
           gs_add_row(key, ws=3, input=temp)
+          showNotification("Succesfully added", duration=3, type="message")
           print("Stop point 4.pro")
         }
         print("Stop point 5")
@@ -111,6 +113,7 @@ shinyServer(function(input, output, session) {
         
         if(checkSourcePush==FALSE){
           gs_add_row(key, ws=1, input=temp2)
+          showNotification("Succesfully added", duration=3, type="message")
           checkSourcePush <<- TRUE
         }
         
@@ -739,7 +742,7 @@ shinyServer(function(input, output, session) {
   outTable <- read.csv(slLink, stringsAsFactors=FALSE)
   setDT(outTable)
   
-  outTable[, Link:=paste0("<a href='", SourceURL,"'>Link</a>")]
+  outTable[, Link:=paste0("<a target='_blank' href='", SourceURL,"'>Link</a>")]
   outTable <- outTable[, c(1:9,27)]
   
   
