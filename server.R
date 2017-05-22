@@ -558,6 +558,7 @@ shinyServer(function(input, output, session) {
       showNotification("Input a URL", duration=3, type="error")
     } else {
         removeClass("url", "red")
+        url <- gsub("\n", "", input$url)
         url <- gsub(" ", "", input$url)
         
         checkOut <- checkURL(url)
@@ -602,7 +603,7 @@ shinyServer(function(input, output, session) {
             updateTextInput(session, "companyURL", value=company_url)
             nm1 <- substr(tables$textPage, regexpr("Extractive Sector Transparency Measures Act Report\r\n", tables$textPage)+52, nchar(tables$textPage))
             nm2 <- gsub("[.,\r]","", substr(nm1, 0, regexpr("\r\n", nm1)))
-            updateTextInput(session, "companyName", value=link_table[Links==url]$Company)
+            updateTextInput(session, "companyName", value=outTable[SourceURL==url]$Company)
             updateSelectInput(session, "currency", selected="Canada Dollar (CAD)")
             
             show("pickTable")
@@ -719,54 +720,30 @@ shinyServer(function(input, output, session) {
   
   ####################################################################################################################################################################################################
   
-  pg <- read_html("http://www.nrcan.gc.ca/mining-materials/estma/18198")
-  big <- html_node(pg, xpath="//*[@id='block-system-main']/div/div[1]/div/div/div")
-  num_reports <- length(html_nodes(big, "a"))-8-5
-  link <- html_nodes(pg, "a")[grep(".pdf", html_nodes(pg, "a"))]
-  num_pdf <- length(link)
-  com_pdf <- substr(link, regexpr(">", link)+1, regexpr("</", link)-1)
-  com_pdf_link <- html_attr(link, 'href')  
-  link <- html_nodes(pg, "a")[grep(".xls", html_nodes(pg, "a"))]
-  num_xls <- length(link)
-  a <- html_attr(html_nodes(pg, "a"), "href")
-  pdfs <- a[grep(".pdf", html_attr(html_nodes(pg, "a"), "href"))]
-  
-  output$ui <- renderUI({
-    HTML(paste0("Number of reports: ", num_reports, 
-                "<br>Number of PDF reports: ", num_pdf,
-                "<br>Number of XLS reports: ", num_xls,
-                "<br>Number of completed reports: TBD"))
-  })
-  
-  link_table <- data.table(Company=com_pdf, Links=com_pdf_link)
-  
-  output$pdfTable <- renderTable({
-    link_table
-  })
   
   slLink <- "https://docs.google.com/spreadsheets/d/14s79csLQ-JYPkZBy6nJ7O1Gy6r9V2xosFltIqNnLjjY/pub?gid=0&single=true&output=csv"
   
-  output$sourcelist <- renderUI({
-    HTML(paste0("Link: ", "<a href='",slLink,"'>Text</a>"))
-  })
+  outTable <- read.csv(slLink, stringsAsFactors=FALSE)
+  setDT(outTable)
+  
+  outTable[, Link:=paste0("<a href='", SourceURL,"'>Link</a>")]
+  outTable <- outTable[, c(1:9,27)]
+  
+  
+  
+  ##SET AS RENDER UI AND IMPLEMENT LINKS NEXT!!
   
   output$sourcelistPDF <- renderTable({
-    outTable <- read.csv(slLink, stringsAsFactors=FALSE)
-    setDT(outTable)
-    outTable[Scraped.==0, c(1:9)][Format=="PDF"]
-  })
+    outTable[Scraped.==0, c(1:10)][Format=="PDF"][, c("Company","Link","SourceType","Format","Jurisdiction","Added","Added.by","Scraped.")]
+  }, sanitize.text.function = function(x) x)
   
   output$sourcelistExcel <- renderTable({
-    outTable <- read.csv(slLink, stringsAsFactors=FALSE)
-    setDT(outTable)
-    outTable[Scraped.==0, c(1:9)][Format=="Excel"]
-  })
+    outTable[Scraped.==0, c(1:10)][Format=="Excel"][, c("Company","Link","SourceType","Format","Jurisdiction","Added","Added.by","Scraped.")]
+  }, sanitize.text.function = function(x) x)
   
   output$sourcelistTBD <- renderTable({
-    outTable <- read.csv(slLink, stringsAsFactors=FALSE)
-    setDT(outTable)
-    outTable[Scraped.==0, c(1:9)][Format=="TBD"]
-  })
+    outTable[Scraped.==0, c(1:10)][Format=="TBD"][, c("Company","Link","SourceType","Format","Jurisdiction","Added","Added.by","Scraped.")]
+  }, sanitize.text.function = function(x) x)
   
   
   
