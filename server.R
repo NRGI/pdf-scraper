@@ -721,6 +721,12 @@ shinyServer(function(input, output, session) {
   
   slLink <- "https://docs.google.com/spreadsheets/d/14s79csLQ-JYPkZBy6nJ7O1Gy6r9V2xosFltIqNnLjjY/pub?gid=0&single=true&output=csv"
   
+  outTable <- read.csv(slLink, stringsAsFactors=FALSE)
+  setDT(outTable)
+  
+  outTable[, Link:=paste0("<a target='_blank' href='", SourceURL,"'>Link</a>")]
+  outTable <- outTable[, c(1:9,27)]
+  
   observeEvent(input$loadSourcelist, {
     
     hide("loadSourcelist")
@@ -737,19 +743,6 @@ shinyServer(function(input, output, session) {
       }, sanitize.text.function = function(x) x)
     
   })
-  
-  
-  outTable <- read.csv(slLink, stringsAsFactors=FALSE)
-  setDT(outTable)
-  
-  outTable[, Link:=paste0("<a target='_blank' href='", SourceURL,"'>Link</a>")]
-  outTable <- outTable[, c(1:9,27)]
-  
-  
-  
-  ##SET AS RENDER UI AND IMPLEMENT LINKS NEXT!!
-  
-  
   
   
   
