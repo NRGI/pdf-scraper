@@ -241,14 +241,14 @@ shinyServer(function(input, output, session) {
   })
   
   observeEvent(input$sheetOK, {
-    gs_new(title=paste0(input$newSheetName, "_", Sys.Date()),
+    gs_new(title=paste0(input$newSheetName, "_", Sys.Date(), "_ptgfile"),
            ws="Source",
            input=data.frame("CompanyName"='x', "CompanyURL"='x', "CompanyCountry"='x', "SourceName"='x', "SourceID"='x', "SourceURL"='x',	"SourceDate"='x',	"ReportStart"='x', "ReportEnd"='x',	"OpenCorporatesURL"='x', "Currency"='x'),
            byrow=TRUE
            )
     print("After create new")
     
-    new_sheet_key <<- gs_title(x=paste0(input$newSheetName, "_", Sys.Date()))
+    new_sheet_key <<- gs_title(x=paste0(input$newSheetName, "_", Sys.Date(), "_ptgfile"))
     print("After get sheet key")
     
     gs_ws_new(ss=new_sheet_key,
@@ -261,7 +261,7 @@ shinyServer(function(input, output, session) {
               input=data.frame("Country"='x',	"Project Name"='x',	"Notes"='x',	"Payment Type"='x',	"Value"='x', "Company"='x',	"id"='x'),
               byrow=TRUE
               )
-    new_sheet_key <<- gs_title(x=paste0(input$newSheetName, "_", Sys.Date()))
+    new_sheet_key <<- gs_title(x=paste0(input$newSheetName, "_", Sys.Date(), "_ptgfile"))
     
     pushCheck(new_sheet_key)
     
@@ -474,6 +474,7 @@ shinyServer(function(input, output, session) {
         str(temp)
         pdfPath <<- temp
         updateTextInput(session, "companyURL", value=company_url)
+        updateTextInput(session, "companyName", value=outTable[SourceURL==url]$Company)
         
         show("pageScrapeNum")
         show("pageScrape")
@@ -626,12 +627,6 @@ shinyServer(function(input, output, session) {
   output$pickTable <- renderUI({
     selectInput("tableSelect", "Pick table", choices=1:length(tables$df), selected=NA)
   })
-  
-  # observeEvent(input$tableSelect, {
-  #   val <- as.numeric(input$tableSelect)
-  #   
-  #   current$current <- as.data.table(tables$df[[val]])
-  # })
   
   ################
   #Table reset button
