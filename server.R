@@ -14,8 +14,7 @@ shinyServer(function(input, output, session) {
   scrapeTrue <- FALSE
   isNewSheet <- FALSE
   checkSourcePush <- FALSE
-  
-  print("OK IT WORKED")
+
   iso <- fread('data/isoCurrency.csv')
   
   tables <- reactiveValues(df = NULL)
@@ -751,11 +750,24 @@ shinyServer(function(input, output, session) {
     HTML(paste0("Link: ", "<a href='",slLink,"'>Text</a>"))
   })
   
-  output$sourcelist <- renderTable({
+  output$sourcelistPDF <- renderTable({
     outTable <- read.csv(slLink, stringsAsFactors=FALSE)
     setDT(outTable)
-    outTable[Status==0]
+    outTable[Scraped.==0, c(1:9)][Format=="PDF"]
   })
+  
+  output$sourcelistExcel <- renderTable({
+    outTable <- read.csv(slLink, stringsAsFactors=FALSE)
+    setDT(outTable)
+    outTable[Scraped.==0, c(1:9)][Format=="Excel"]
+  })
+  
+  output$sourcelistTBD <- renderTable({
+    outTable <- read.csv(slLink, stringsAsFactors=FALSE)
+    setDT(outTable)
+    outTable[Scraped.==0, c(1:9)][Format=="TBD"]
+  })
+  
   
   
   ####################################################################################################################################################################################################

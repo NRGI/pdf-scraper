@@ -63,14 +63,22 @@ shinyUI(fluidPage(
              id='tabset',
              tabPanel(title="Reports",
                       tabsetPanel(id='infoTabset',
-                                  tabPanel(title="ESTMA",
-                                           uiOutput("ui"),
-                                           tableOutput("pdfTable")
+                                  # tabPanel(title="ESTMA",
+                                  #          uiOutput("ui"),
+                                  #          tableOutput("pdfTable")
+                                  # ),
+                                  tabPanel(title="PDF",
+                                           uiOutput("sourcelistPDF")#,
+                                           #tableOutput("sourcelistTable")
+                                           ),
+                                  tabPanel(title="Excel",
+                                           uiOutput("sourcelistExcel")#,
+                                           #tableOutput("sourcelistTable")
                                   ),
-                                  tabPanel(title="Sourcelist",
-                                           uiOutput("sourcelist"),
-                                           tableOutput("sourcelistTable")
-                                           )
+                                  tabPanel(title="TBD",
+                                           uiOutput("sourcelistTBD")#,
+                                           #tableOutput("sourcelistTable")
+                                  )
                                   )
                      
                       #dataTableOutput("pdfTable")
