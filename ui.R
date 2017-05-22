@@ -59,7 +59,7 @@ shinyUI(fluidPage(
              tabPanel(title="Reports",
                       tabsetPanel(id='infoTabset',
                                   tabPanel(title="PDF",
-                                           #uiOutput("sourcelistPDF")#,
+                                           actionButton("loadSourcelist", label="Load sourcelist"),
                                            tableOutput("sourcelistPDF")
                                            ),
                                   tabPanel(title="Excel",

@@ -718,6 +718,24 @@ shinyServer(function(input, output, session) {
   
   slLink <- "https://docs.google.com/spreadsheets/d/14s79csLQ-JYPkZBy6nJ7O1Gy6r9V2xosFltIqNnLjjY/pub?gid=0&single=true&output=csv"
   
+  observeEvent(input$loadSourcelist, {
+    
+    hide("loadSourcelist")
+    output$sourcelistPDF <- renderTable({
+      outTable[Scraped.==0, c(1:10)][Format=="PDF"][, c("Company","Link","SourceType","Format","Jurisdiction","Added","Added.by","Scraped.")]
+      }, sanitize.text.function = function(x) x)
+    
+    output$sourcelistExcel <- renderTable({
+      outTable[Scraped.==0, c(1:10)][Format=="Excel"][, c("Company","Link","SourceType","Format","Jurisdiction","Added","Added.by","Scraped.")]
+      }, sanitize.text.function = function(x) x)
+    
+    output$sourcelistTBD <- renderTable({
+      outTable[Scraped.==0, c(1:10)][Format=="TBD"][, c("Company","Link","SourceType","Format","Jurisdiction","Added","Added.by","Scraped.")]
+      }, sanitize.text.function = function(x) x)
+    
+  })
+  
+  
   outTable <- read.csv(slLink, stringsAsFactors=FALSE)
   setDT(outTable)
   
@@ -728,17 +746,7 @@ shinyServer(function(input, output, session) {
   
   ##SET AS RENDER UI AND IMPLEMENT LINKS NEXT!!
   
-  output$sourcelistPDF <- renderTable({
-    outTable[Scraped.==0, c(1:10)][Format=="PDF"][, c("Company","Link","SourceType","Format","Jurisdiction","Added","Added.by","Scraped.")]
-  }, sanitize.text.function = function(x) x)
   
-  output$sourcelistExcel <- renderTable({
-    outTable[Scraped.==0, c(1:10)][Format=="Excel"][, c("Company","Link","SourceType","Format","Jurisdiction","Added","Added.by","Scraped.")]
-  }, sanitize.text.function = function(x) x)
-  
-  output$sourcelistTBD <- renderTable({
-    outTable[Scraped.==0, c(1:10)][Format=="TBD"][, c("Company","Link","SourceType","Format","Jurisdiction","Added","Added.by","Scraped.")]
-  }, sanitize.text.function = function(x) x)
   
   
   
