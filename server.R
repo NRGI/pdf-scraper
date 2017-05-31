@@ -229,7 +229,7 @@ shinyServer(function(input, output, session) {
         modalDialog(
           textInput("newSheetName", label="Insert name"),
           footer = tagList(
-            modalButton("Cancel"),
+            #modalButton("Cancel"),
             actionButton("sheetOK", "OK")
           )
         )
@@ -244,6 +244,8 @@ shinyServer(function(input, output, session) {
   })
   
   observeEvent(input$sheetOK, {
+    if(input$newSheetName=="") {showNotification("Add a new sheet name", type="error", duration=3)}
+    req(input$newSheetName)
     gs_new(title=paste0(input$newSheetName, "_", Sys.Date(), "_ptgfile"),
            ws="Source",
            input=data.frame("CompanyName"='x', "CompanyURL"='x', "CompanyCountry"='x', "SourceName"='x', "SourceID"='x', "SourceURL"='x',	"SourceDate"='x',	"ReportStart"='x', "ReportEnd"='x',	"OpenCorporatesURL"='x', "Currency"='x'),

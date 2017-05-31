@@ -43,9 +43,9 @@ shinyUI(fluidPage(
                   ),
            column(width=1,
                   actionButton("melt", label="Reshape data"),
-                  actionButton("addToMaster", label="Add to master"),
-                  actionButton("newSheetPush", label="Push to new sheet"),
-                  actionButton("addToRemote", label="Add to database")
+                  #actionButton("addToMaster", label="Add to master"),
+                  actionButton("newSheetPush", label="Push to new sheet")#,
+                  #actionButton("addToRemote", label="Add to database")
                   ),
             column(width=2,
                    actionButton("hidePanel", label="Hide view panel"),
