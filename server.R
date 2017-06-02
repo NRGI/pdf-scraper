@@ -116,10 +116,6 @@ shinyServer(function(input, output, session) {
           showNotification("Succesfully added", duration=3, type="message")
           checkSourcePush <<- TRUE
         }
-        
-        
-        
-        
       }
     }
   }
@@ -429,6 +425,61 @@ shinyServer(function(input, output, session) {
   
   ####################################################################################################################################################################################################
   
+  
+  observeEvent(input$urlView, {
+    hide("pickTable")
+    hide("reset")
+    hide("pageScrapeNum")
+    hide("pageScrape")
+    
+    scrapeTrue <<- FALSE
+    checkSourcePush <<- FALSE
+    
+    if(input$url=="" | input$url=="INPUT URL"){
+      addClass("url", "red")
+      showNotification("Input a URL", duration=10, type="error")
+    } else {
+      removeClass("url", "red")
+      url <- gsub(" ", "", input$url)
+      
+      checkOut <- checkURL(url)
+      
+      if(checkOut%in%c("That url doesn't exist","You need to authenticate!","You made a mistake!","The server screwed up")) {
+        print("Didn't pass URL check")
+        showNotification(checkOut, duration=3, type="error")
+      } else {
+        
+        print(paste("URL:", url))
+        output$pdfOut <- renderUI({
+          tags$iframe(src=url, style="height:800px; width:100%")
+        })
+        
+        updateTabsetPanel(session, "tabset", selected="Add report")
+        updateTabsetPanel(session, "addTabset", selected="Metadata")
+        updateTextInput(session, "sourceURL", value=url)
+        
+        if(grepl(".com", url)==TRUE) {
+          company_url <- substr(url, 1, regexpr(".com", url)+3)
+        } else if(grepl(".ca", url)==TRUE) {
+          company_url <- substr(url, 1, regexpr(".ca", url)+2)
+        } else{
+          company_url <- ""
+        }
+        
+        updateTextInput(session, "companyURL", value=company_url)
+        
+        show("deleteRowButton")
+        show("changeHeaderButton")
+        show("meltColumns")
+        show("deleteColButton")
+        show("doRow")
+        show("newGov")
+        show("newProj")
+      }
+    }
+  })
+  ###########
+  
   observeEvent(input$urlLoad, {
     
     hide("pickTable")
@@ -475,6 +526,7 @@ shinyServer(function(input, output, session) {
           company_url <- ""
         }
         
+        
         scrapeTrue <<- TRUE
         str(temp)
         pdfPath <<- temp
@@ -495,22 +547,22 @@ shinyServer(function(input, output, session) {
     }
   })
 
-########### 
+
   
-  observeEvent(input$urlView, {
+###########
+  observeEvent(input$urlLoadScrape, {
+    
     hide("pickTable")
     hide("reset")
-    hide("pageScrapeNum")
-    hide("pageScrape")
     
-    scrapeTrue <<- FALSE
     checkSourcePush <<- FALSE
     
     if(input$url=="" | input$url=="INPUT URL"){
       addClass("url", "red")
-      showNotification("Input a URL", duration=10, type="error")
+      showNotification("Input a URL", duration=3, type="error")
+      
     } else {
-      removeClass("url", "red")
+      removeClass("url","red")
       url <- gsub(" ", "", input$url)
       
       checkOut <- checkURL(url)
@@ -519,25 +571,48 @@ shinyServer(function(input, output, session) {
         print("Didn't pass URL check")
         showNotification(checkOut, duration=3, type="error")
       } else {
-      
-        print(paste("URL:", url))
-        output$pdfOut <- renderUI({
-          tags$iframe(src=url, style="height:800px; width:100%")
-        })
         
-         updateTabsetPanel(session, "tabset", selected="Add report")
-         updateTabsetPanel(session, "addTabset", selected="Metadata")
+        #if(grepl(".pdf", url)) {
+        pdf_folder <<- "pdf_folder"
+        if(!file.exists(pdf_folder))
+          dir.create("pdf_folder")
+        temp <- tempfile(fileext = ".pdf", tmpdir = "pdf_folder")
+        download.file(url, temp, mode = "wb")
+        addResourcePath("pdf_folder", pdf_folder)
+        
+        output$pdfOut <- renderUI({
+          tags$iframe(src=temp, style="height:800px; width:100%")
+        })
+        #}
+        updateTabsetPanel(session, "tabset", selected="Add report")
+        updateTabsetPanel(session, "addTabset", selected="Metadata")
         updateTextInput(session, "sourceURL", value=url)
-  
+        
         if(grepl(".com", url)==TRUE) {
           company_url <- substr(url, 1, regexpr(".com", url)+3)
-        } else if(grepl(".ca", url)==TRUE) {
+        } else if(grepl(".ca", url)) {
           company_url <- substr(url, 1, regexpr(".ca", url)+2)
         } else{
           company_url <- ""
         }
-  
+        
+        ##text work
+        tables$textPage <- extract_text(temp, pages=1)
+        updateTextInput(session, "reportStart", value=gsub(" ", "", substr(tables$textPage, regexpr("From: ", tables$textPage)+6, regexpr("To:", tables$textPage)-1)))
+        updateTextInput(session, "reportEnd", value=gsub(" ", "", substr(tables$textPage, regexpr("To:", tables$textPage)+4, regexpr('\n', tables$textPage)-1)))
+        updateTextInput(session, "sourceDate", value=gsub("[\r\n,:, ,^a-zA-Z]", "", substr(tables$textPage, regexpr("Date:", tables$textPage)+4, regexpr("Date:", tables$textPage)+18)))
+        updateTextInput(session, "sourceID", value=substr(tables$textPage, regexpr("E[0-9]{6}", tables$textPage), regexpr("E[0-9]{6}", tables$textPage)+6))
+        updateTextInput(session, "sourceURL", value=url)
+        ##end text work
+        
+        scrapeTrue <<- TRUE
+        str(temp)
+        pdfPath <<- temp
         updateTextInput(session, "companyURL", value=company_url)
+        updateTextInput(session, "companyName", value=outTable[SourceURL==url]$Company)
+        
+        show("pageScrapeNum")
+        show("pageScrape")
         
         show("deleteRowButton")
         show("changeHeaderButton")
@@ -549,82 +624,82 @@ shinyServer(function(input, output, session) {
       }
     }
   })
-  
-###########
-  
-  observeEvent(input$urlLoadScrape, {
-    hide("pageScrapeNum")
-    hide("pageScrape")
-    
-    scrapeTrue <<- FALSE
-    checkSourcePush <<- FALSE
-    
-    if(input$url=="" | input$url=="INPUT URL"){
-      addClass("url", "red")
-      showNotification("Input a URL", duration=3, type="error")
-    } else {
-        removeClass("url", "red")
-        url <- gsub("\n", "", input$url)
-        url <- gsub(" ", "", input$url)
-        
-        checkOut <- checkURL(url)
-        
-        if(checkOut%in%c("That url doesn't exist","You need to authenticate!","You made a mistake!","The server screwed up")) {
-          print("Didn't pass URL check")
-          showNotification(checkOut, duration=3, type="error")
-        } else {
-          pdf_folder <- "pdf_folder"
-      
-          if(!file.exists(pdf_folder))
-            dir.create("pdf_folder")
-          temp <- tempfile(fileext = ".pdf", tmpdir = "pdf_folder")
-          download.file(url, temp, mode = "wb")
-          addResourcePath("pdf_folder", pdf_folder)
-          
-          output$pdfOut <- renderUI({
-            tags$iframe(src=temp, style="height:800px; width:100%")
-            })
-          
-          updateTabsetPanel(session, "tabset", selected="Add report")
-          updateTabsetPanel(session, "addTabset", selected="Metadata")
-          
-            tables$df <- extract_tables(temp, widget='reduced')
-            tables$textPage <- extract_text(temp, pages=1)
-            tables$tableTextPage <- extract_text(temp, pages=c(2,3))
-            
-            updateTextInput(session, "reportStart", value=gsub(" ", "", substr(tables$textPage, regexpr("From: ", tables$textPage)+6, regexpr("To:", tables$textPage)-1)))
-            updateTextInput(session, "reportEnd", value=gsub(" ", "", substr(tables$textPage, regexpr("To:", tables$textPage)+4, regexpr('\n', tables$textPage)-1)))
-            updateTextInput(session, "sourceDate", value=gsub("[\r\n,:, ,^a-zA-Z]", "", substr(tables$textPage, regexpr("Date:", tables$textPage)+4, regexpr("Date:", tables$textPage)+18)))
-            updateTextInput(session, "sourceID", value=substr(tables$textPage, regexpr("E[0-9]{6}", tables$textPage), regexpr("E[0-9]{6}", tables$textPage)+6))
-            updateTextInput(session, "sourceURL", value=url)
-            
-            if(grepl(".com", url)==TRUE) {
-              company_url <- substr(url, 1, regexpr(".com", url)+3)
-              } else if(grep(".ca", url)) {
-                company_url <- substr(url, 1, regexpr(".ca", url)+2)
-                } else{
-                  company_url <- ""
-                  }
-            
-            updateTextInput(session, "companyURL", value=company_url)
-            nm1 <- substr(tables$textPage, regexpr("Extractive Sector Transparency Measures Act Report\r\n", tables$textPage)+52, nchar(tables$textPage))
-            nm2 <- gsub("[.,\r]","", substr(nm1, 0, regexpr("\r\n", nm1)))
-            updateTextInput(session, "companyName", value=outTable[SourceURL==url]$Company)
-            updateSelectInput(session, "currency", selected="Canada Dollar (CAD)")
-            
-            show("pickTable")
-            show("reset")
-            
-            show("deleteRowButton")
-            show("changeHeaderButton")
-            show("meltColumns")
-            show("deleteColButton")
-            show("doRow")
-            show("newGov")
-            show("newProj")
-        }
-       }
-    })
+  # observeEvent(input$urlLoadScrape, {
+  #   hide("pageScrapeNum")
+  #   hide("pageScrape")
+  #   
+  #   scrapeTrue <<- FALSE
+  #   checkSourcePush <<- FALSE
+  #   
+  #   if(input$url=="" | input$url=="INPUT URL"){
+  #     addClass("url", "red")
+  #     showNotification("Input a URL", duration=3, type="error")
+  #   } else {
+  #       removeClass("url", "red")
+  #       url <- gsub("\n", "", input$url)
+  #       url <- gsub(" ", "", input$url)
+  #       
+  #       checkOut <- checkURL(url)
+  #       
+  #       if(checkOut%in%c("That url doesn't exist","You need to authenticate!","You made a mistake!","The server screwed up")) {
+  #         print("Didn't pass URL check")
+  #         showNotification(checkOut, duration=3, type="error")
+  #       } else {
+  #         
+  #         
+  #         pdf_folder <- "pdf_folder"
+  # 
+  #         if(!file.exists(pdf_folder))
+  #           dir.create("pdf_folder")
+  #         temp <- tempfile(fileext = ".pdf", tmpdir = "pdf_folder")
+  #         download.file(url, temp, mode = "wb")
+  #         addResourcePath("pdf_folder", pdf_folder)
+  # 
+  #         output$pdfOut <- renderUI({
+  #           tags$iframe(src=temp, style="height:800px; width:100%")
+  #           })
+  #         
+  #         updateTabsetPanel(session, "tabset", selected="Add report")
+  #         updateTabsetPanel(session, "addTabset", selected="Metadata")
+  #         
+  #           # tables$df <- extract_tables(temp, widget='reduced')
+  #           tables$textPage <- extract_text(temp, pages=1)
+  #           tables$tableTextPage <- extract_text(temp, pages=c(2,3))
+  #           
+  #           updateTextInput(session, "reportStart", value=gsub(" ", "", substr(tables$textPage, regexpr("From: ", tables$textPage)+6, regexpr("To:", tables$textPage)-1)))
+  #           updateTextInput(session, "reportEnd", value=gsub(" ", "", substr(tables$textPage, regexpr("To:", tables$textPage)+4, regexpr('\n', tables$textPage)-1)))
+  #           updateTextInput(session, "sourceDate", value=gsub("[\r\n,:, ,^a-zA-Z]", "", substr(tables$textPage, regexpr("Date:", tables$textPage)+4, regexpr("Date:", tables$textPage)+18)))
+  #           updateTextInput(session, "sourceID", value=substr(tables$textPage, regexpr("E[0-9]{6}", tables$textPage), regexpr("E[0-9]{6}", tables$textPage)+6))
+  #           updateTextInput(session, "sourceURL", value=url)
+  #           
+  #           if(grepl(".com", url)==TRUE) {
+  #             company_url <- substr(url, 1, regexpr(".com", url)+3)
+  #             } else if(grep(".ca", url)) {
+  #               company_url <- substr(url, 1, regexpr(".ca", url)+2)
+  #               } else{
+  #                 company_url <- ""
+  #                 }
+  #           
+  #           updateTextInput(session, "companyURL", value=company_url)
+  #           nm1 <- substr(tables$textPage, regexpr("Extractive Sector Transparency Measures Act Report\r\n", tables$textPage)+52, nchar(tables$textPage))
+  #           nm2 <- gsub("[.,\r]","", substr(nm1, 0, regexpr("\r\n", nm1)))
+  #           updateTextInput(session, "companyName", value=outTable[SourceURL==url]$Company)
+  #           updateSelectInput(session, "currency", selected="Canada Dollar (CAD)")
+  #           
+  #           show("pickTable")
+  #           show("reset")
+  #           
+  #           
+  #           show("deleteRowButton")
+  #           show("changeHeaderButton")
+  #           show("meltColumns")
+  #           show("deleteColButton")
+  #           show("doRow")
+  #           show("newGov")
+  #           show("newProj")
+  #       }
+  #      }
+  #   })
   
   
   ################
