@@ -225,7 +225,7 @@ shinyServer(function(input, output, session) {
         modalDialog(
           textInput("newSheetName", label="Insert name"),
           footer = tagList(
-            #modalButton("Cancel"),
+            modalButton("Cancel"),
             actionButton("sheetOK", "OK")
           )
         )
