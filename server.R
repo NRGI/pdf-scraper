@@ -176,7 +176,9 @@ shinyServer(function(input, output, session) {
   observeEvent(input$ok, {
     password2 <<- input$password
     if (!is.null(input$password) && nzchar(input$password) && input$password==password) {
-      pushToMaster(source_key)
+      #pushToMaster(source_key)
+      pushCheck(source_key)
+      print("top one")
       removeModal()
       #do other stuff here for pushing data
     } else {
@@ -189,7 +191,9 @@ shinyServer(function(input, output, session) {
       showModal(dataModal())
     }
     if(password2==password){
-      pushToMaster(source_key)
+      #pushToMaster(source_key)
+      pushCheck(source_key)
+      print("bottom one")
       showNotification("Succesfully added!", duration=3, type="message")
     }
   })
