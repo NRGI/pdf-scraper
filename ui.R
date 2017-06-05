@@ -44,7 +44,7 @@ shinyUI(fluidPage(
            column(width=1,
                   actionButton("melt", label="Reshape data"),
                   #actionButton("addToMaster", label="Add to master"),
-                  actionButton("newSheetPush", label="Push to new sheet"),
+                  #actionButton("newSheetPush", label="Push to new sheet"),
                   actionButton("addToRemote", label="Add to database")
                   ),
             column(width=2,
@@ -58,15 +58,15 @@ shinyUI(fluidPage(
              id='tabset',
              tabPanel(title="Reports",
                       tabsetPanel(id='infoTabset',
-                                  tabPanel(title="PDF",
+                                  tabPanel(title="ESTMA Individual",
                                            actionButton("loadSourcelist", label="Load sourcelist"),
                                            tableOutput("sourcelistPDF")
                                            ),
-                                  tabPanel(title="Excel",
+                                  tabPanel(title="ESTMA Consolidated",
                                            uiOutput("sourcelistExcel")#,
                                            #tableOutput("sourcelistTable")
                                            ),
-                                  tabPanel(title="TBD",
+                                  tabPanel(title="Non-ESTMA",
                                            uiOutput("sourcelistTBD")#,
                                            #tableOutput("sourcelistTable")
                                            )
