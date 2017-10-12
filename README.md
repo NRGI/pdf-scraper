@@ -5,9 +5,9 @@ The application, developed and hosted by the Natural Resource Governance Institu
 structured data in their browser in a few clicks. See the hosted application [here]() or run the application in an R session.
 
 ## Background
-The application was originally developed to assist in the collection of data from PDF reports filed under the ESTMA regulaions in Canada, data on payments to governments by oil, gas and mining companies. These standardized reports contained multiple pages of well structured reports whose manual transcription would have been tedious and potentially inaccurate, with hundreds of such reports.
+The application was originally developed to assist in the collection of data from PDF reports filed under the ESTMA regulaions in Canada, data on payments to governments by oil, gas and mining companies. These standardized reports contained multiple pages of well structured reports whose manual transcription would have been tedious and potentially inaccurate over the hundreds of individual cases.
 
-Upon discovering the tabulizer package from rOpenSci, a solution was imagined where the scraping and verification of data could be done side-by-side in a single environment, greatly increasing accuracy and productivity over a multi-program solution utilizing Tabula and a spreadsheet program.
+Upon discovering the tabulizer package from rOpenSci, a solution was imagined where the scraping and verification of data could be done side-by-side in a single environment, greatly increasing accuracy and productivity over a multi-program solution utilizing standalone Tabula and a spreadsheet program, or manual transcription.
 
 Following that project, the application's wide-ranging applicability to those in the open-data community was realized and this tool is now available for all to use.
 
