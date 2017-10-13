@@ -15,6 +15,13 @@ Following that project, the application's wide-ranging applicability to those in
 #### Step 1. Download PDF
 ![alt text](https://github.com/NRGI/pdf-scraper/blob/master/images/scraper1.gif)
 
+<br>
+<br>
+<br>
+
+
+***
+ 
 
 #### Step 2. Scrape tables
 
@@ -23,9 +30,19 @@ Tables can be scraped by inserting their page number in the text field and using
 Multiple pages can be scraped simultaneously with their results combined by separating page numbers with a comma (`1,5,8`) or separating the first and last page in a series with a colon (`5:42`)
 ![alt text](https://github.com/NRGI/pdf-scraper/blob/master/images/scraper2.gif)
 
+<br>
+<br>
+<br>
+
 If a page contains multiple tables, the `Custom Scrape` button can be used to specficy an area of the page from which to extract the table. Must be done one page at a time.
 
 ![alt text](https://github.com/NRGI/pdf-scraper/blob/master/images/scraper3.gif)
+
+<br>
+<br>
+<br>
+
+***
 
 
 #### Step 3. Download data
