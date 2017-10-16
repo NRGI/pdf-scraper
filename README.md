@@ -51,3 +51,12 @@ The scraped data visible in the table can be downloaded as a CSV or copy-pasted 
 
 ![alt text](https://github.com/NRGI/pdf-scraper/blob/master/images/scraper4.gif)
 
+
+<br>
+<br>
+<br>
+
+## Acknowledgements
+
+In addition to the Tabula and rOpenSci teams whose software made this application possible, we extend our thanks to the Publish what You Pay - Canada team and our NRGI colleagues for their feedback during the development of this application.
+
