@@ -11,6 +11,11 @@ Upon discovering the tabulizer package from rOpenSci, a solution was imagined wh
 
 Following that project, the application's wide-ranging applicability to those in the open-data community was realized and this tool is now available for all to use.
 
+#### Disclaimer
+
+The tool relies on Tabula to detect tables and your results may vary depending on how the table is constructed in the PDF. Rows/columns will not always be aligned correctly and care should be taken to double-check scraped data before use. Will not work on image-based PDFs.
+
+
 ## Use
 #### Step 1. Download PDF
 ![alt text](https://github.com/NRGI/pdf-scraper/blob/master/images/scraper1.gif)
