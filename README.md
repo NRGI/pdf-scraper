@@ -1,8 +1,8 @@
 # pdf-scraper
-R Shiny application to scrape tables from PDFs. Uses [Tabula](http://tabula.technology/) via the [tabulizer package](https://github.com/ropensci/tabulizer) for R
+R Shiny application to scrape tables from PDFs. Uses [Tabula](http://tabula.technology/) via the [tabulizer package](https://github.com/ropensci/tabulizer) for R.
 
 The application, developed and hosted by the Natural Resource Governance Institute, allows users to scrape tables from PDFs into
-structured data in their browser in a few clicks. See the hosted application [here]() or run the application in an R session.
+structured data in their browser in a few clicks. See the hosted application [here](http://shiny.resourcedata.org/pdf-scraper/) or run the application in an R session.
 
 ## Background
 The application was originally developed to assist in the collection of data from PDF reports filed under the ESTMA regulaions in Canada, data on payments to governments by oil, gas and mining companies. These standardized reports contained multiple pages of well structured reports whose manual transcription would have been tedious and potentially inaccurate over the hundreds of individual cases.
@@ -15,7 +15,12 @@ Following that project, the application's wide-ranging applicability to those in
 
 The tool relies on Tabula to detect tables and your results may vary depending on how the table is constructed in the PDF. Rows/columns will not always be aligned correctly and care should be taken to double-check scraped data before use. Will not work on image-based PDFs.
 
+## Acknowledgements
 
+In addition to the Tabula and rOpenSci teams whose software made this application possible, we extend our thanks to the Publish what You Pay - Canada team and our NRGI colleagues for their feedback during the development of this application.
+<br>
+<br>
+<br>
 ## Use
 #### Step 1. Download PDF
 ![alt text](https://github.com/NRGI/pdf-scraper/blob/master/images/scraper1.gif)
@@ -61,7 +66,5 @@ The scraped data visible in the table can be downloaded as a CSV or copy-pasted 
 <br>
 <br>
 
-## Acknowledgements
 
-In addition to the Tabula and rOpenSci teams whose software made this application possible, we extend our thanks to the Publish what You Pay - Canada team and our NRGI colleagues for their feedback during the development of this application.
 
