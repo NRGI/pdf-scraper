@@ -17,7 +17,7 @@ The tool relies on Tabula to detect tables and your results may vary depending o
 
 ## Acknowledgements
 
-In addition to the Tabula and rOpenSci teams whose software made this application possible, we extend our thanks to the Publish what You Pay - Canada team and our NRGI colleagues for their feedback during the development of this application.
+In addition to the Tabula and rOpenSci teams whose software made this application possible, we extend our thanks to the Publish what You Pay - Canada team; Kate Vang from ONE; and our NRGI colleagues for their feedback during the development of this application.
 <br>
 <br>
 <br>
