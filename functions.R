@@ -11,6 +11,17 @@ checkURL <- function(url) {
 ##------------------------------------------------------------------------------------------------
 
 pageScrape <- function() {
+
+  if(any(strsplit(input$pageNumber,"")[[1]] %in% c(letters,LETTERS))){
+    req(FALSE)
+  }
+  
+  if(grepl("\\-", input$pageNumber) | grepl("\\.", input$pageNumber) | grepl("\\*", input$pageNumber) | grepl('\\"', input$pageNumber)){
+    req(FALSE)
+  }
+  
+  
+  
   
   if(!grepl(":", input$pageNumber)){
     pageScrapeNum <- as.numeric(unlist(strsplit(input$pageNumber, ",")))

@@ -1,5 +1,12 @@
 
 selectScrape <- function() {
+  if(any(strsplit(input$pageNumber,"")[[1]] %in% c(letters,LETTERS))){
+    req(FALSE)
+  }
+  if(grepl("\\-", input$pageNumber) | grepl("\\.", input$pageNumber) | grepl("\\*", input$pageNumber) | grepl('\\"', input$pageNumber)){
+    req(FALSE)
+  }
+  
   print(get_n_pages(pdf$pdfPath))
   
   req(length(unlist(strsplit(input$pageNumber, ",")))==1)

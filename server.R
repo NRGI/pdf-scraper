@@ -8,10 +8,10 @@ library(shinythemes)
 library(png)
 
 
-
-
 shinyServer(function(input, output) {
-  current <- reactiveValues(current=data.frame(V1=NA, V2=NA, V3=NA, V4=NA, V5=NA))#NA)#current=
+  
+  
+  current <- reactiveValues(current=data.frame(V1="", V2="", V3="", V4="", V5=""))#NA)#current=
   
   source('drawScrape.R', local=TRUE)
   source('functions.R', local=TRUE)
