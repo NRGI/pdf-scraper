@@ -36,8 +36,11 @@ pageScrape <- function() {
   print("out of loop")
   print(pageScrapeNum)
   
-  # pageScrapeNum_min <- min(as.numeric(unlist(strsplit(input$pageScrapeNum, ","))))
   pageScrapeNum_max <- max(pageScrapeNum)
+  
+  er <- try(get_n_pages(pdf$pdfPath))
+  if(class(er)=="try-error"){req(FALSE)}
+  
   
   
   if(pageScrapeNum_max>get_n_pages(pdf$pdfPath)){

@@ -7,7 +7,8 @@ selectScrape <- function() {
     req(FALSE)
   }
   
-  print(get_n_pages(pdf$pdfPath))
+  er <- try(get_n_pages(pdf$pdfPath))
+  if(class(er)=="try-error"){req(FALSE)}
   
   req(length(unlist(strsplit(input$pageNumber, ",")))==1)
   
