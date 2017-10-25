@@ -2,7 +2,7 @@
 R Shiny application to scrape tables from PDFs. Uses [Tabula](http://tabula.technology/) via the [tabulizer package](https://github.com/ropensci/tabulizer) for R.
 
 The application, developed and hosted by the Natural Resource Governance Institute, allows users to scrape tables from PDFs into
-structured data in their browser in a few clicks. See the hosted application [here](http://shiny.resourcedata.org/pdf-scraper/) or run the application in an R session.
+structured data in their browser in a few clicks. See the hosted application [here](http://apps.resourcegovernance.org/pdf-table-extractor) or run the application locally with the following command: `shiny::runGitHub("pdf-scraper", "NRGI")`.
 
 ## Background
 The application was originally developed to assist in the collection of data from PDF reports filed under the ESTMA regulaions in Canada, data on payments to governments by oil, gas and mining companies. These standardized reports contained multiple pages of well structured reports whose manual transcription would have been tedious and potentially inaccurate over the hundreds of individual cases.
