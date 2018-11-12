@@ -1,5 +1,8 @@
 
 selectScrape <- function() {
+  
+  if(grepl("[[:punct:]]", input$pageNumber)){req(FALSE)}
+  
   if(any(strsplit(input$pageNumber,"")[[1]] %in% c(letters,LETTERS))){
     req(FALSE)
   }

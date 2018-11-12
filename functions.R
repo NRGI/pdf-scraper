@@ -10,6 +10,7 @@ checkURL <- function(url) {
 ##------------------------------------------------------------------------------------------------
 ##------------------------------------------------------------------------------------------------
 
+
 pageScrape <- function() {
 
   if(any(strsplit(input$pageNumber,"")[[1]] %in% c(letters,LETTERS))){
@@ -51,11 +52,9 @@ pageScrape <- function() {
   
   showModal(waitingModal())
   
-  print("WHAT")
   
   scraped_table <- extract_tables(pdf$pdfPath, widget="reduced", pages=pageScrapeNum)
   
-  print("WHY")
   
   removeModal()
   
